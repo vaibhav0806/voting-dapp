@@ -22,12 +22,14 @@ import {
 
 export default function Component() {
     const { login, ready, authenticated } = usePrivy();
-    const { addCandidate, vote, getWinner, getAllCandidates } = useElectionContract();
+    const { vote, getWinner, getAllCandidates } = useElectionContract();
 
     const [candidateIndex, setCandidateIndex] = useState('');
     const [winner, setWinner] = useState('');
     const [candidates, setCandidates] = useState<string[]>([]);
     const [voteCounts, setVoteCounts] = useState<number[]>([]);
+
+    console.log(voteCounts);
 
     const disableLogin = !ready || (ready && authenticated);
 

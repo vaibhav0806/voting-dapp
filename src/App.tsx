@@ -1,4 +1,3 @@
-import ElectionComponent from './Election';
 import './App.css'
 import Component from './NewElectionComponent';
 
