@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,14 +22,13 @@ import {
 
 export default function Component() {
     const { login, ready, authenticated } = usePrivy();
-    const { vote, getWinner, getAllCandidates } = useElectionContract();
+    const { vote, getWinner } = useElectionContract();
 
     const [candidateIndex, setCandidateIndex] = useState('');
     const [winner, setWinner] = useState('');
-    const [candidates, setCandidates] = useState<string[]>([]);
-    const [voteCounts, setVoteCounts] = useState<number[]>([]);
 
-    console.log(voteCounts);
+    
+
 
     const disableLogin = !ready || (ready && authenticated);
 
