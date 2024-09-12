@@ -10,7 +10,6 @@ import {
     TableBody,
     TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -49,17 +48,20 @@ export default function Component() {
         fetchCandidates();
 
         return () => {
-            isMounted = false; // Cleanup to prevent setting state after unmount
+            isMounted = false;
         };
-    }, []);
+    }, [authenticated, getAllCandidates]);
 
-    const handleVote = async (e: any) => {
+    const handleVote = async (e: React.FormEvent) => {
         e.preventDefault();
         await vote(parseInt(candidateIndex));
         setCandidateIndex('');
     };
 
-    console.log(candidates);
+    const handleGetWinner = async () => {
+        const winnerName = await getWinner();
+        setWinner(winnerName);
+    };
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-b from-gray-100 to-gray-200 p-4">
@@ -90,22 +92,12 @@ export default function Component() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">0</TableCell>
-                                <TableCell>Candidate A</TableCell>
+                        {candidates.map((candidate, index) => (
+                            <TableRow key={index}>
+                                <TableCell className="font-medium">{index}</TableCell>
+                                <TableCell>{candidate}</TableCell>
                             </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">1</TableCell>
-                                <TableCell>Candidate A</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">2</TableCell>
-                                <TableCell>Candidate A</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell className="font-medium">3</TableCell>
-                                <TableCell>Candidate A</TableCell>
-                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
                 <Card className="w-full max-w-md">
@@ -113,7 +105,7 @@ export default function Component() {
                         <CardTitle className="text-2xl font-bold text-center">Decentralized Voting</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2 mb-4">
                             <Input
                                 type="text"
                                 value={candidateIndex}
@@ -125,42 +117,23 @@ export default function Component() {
                                 Vote
                             </Button>
                         </div>
+                        <div className="flex justify-center">
+                            <Button onClick={handleGetWinner} disabled={!authenticated}>
+                                Get Winner
+                            </Button>
+                        </div>
+                        {winner && (
+                            <p className="mt-4 text-center font-semibold">
+                                Winner: {winner}
+                            </p>
+                        )}
                         {!authenticated && (
                             <p className="mt-4 text-sm text-gray-500 text-center">
-                                Please connect your wallet to vote.
+                                Please connect your wallet to vote or get the winner.
                             </p>
                         )}
                     </CardContent>
                 </Card>
-
-                {/* Table to display candidates
-                {candidates.length > 0 && (
-                    <Card className="w-full max-w-md">
-                        <CardHeader>
-                            <CardTitle className="text-xl font-bold text-center">Candidates</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <table className="min-w-full table-auto border-collapse border border-gray-400">
-                                <thead>
-                                    <tr className="bg-gray-200">
-                                        <th className="border border-gray-400 px-4 py-2">Index</th>
-                                        <th className="border border-gray-400 px-4 py-2">Name</th>
-                                        <th className="border border-gray-400 px-4 py-2">Vote Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {candidates.map((name, index) => (
-                                        <tr key={index}>
-                                            <td className="border border-gray-400 px-4 py-2 text-center">{index}</td>
-                                            <td className="border border-gray-400 px-4 py-2 text-center">{name}</td>
-                                            <td className="border border-gray-400 px-4 py-2 text-center">{voteCounts[index]}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </CardContent>
-                    </Card>
-                )} */}
             </main>
         </div>
     );
