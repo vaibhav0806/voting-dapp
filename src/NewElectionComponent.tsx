@@ -33,27 +33,6 @@ export default function Component() {
 
     const disableLogin = !ready || (ready && authenticated);
 
-    useEffect(() => {
-        let isMounted = true;
-
-        async function fetchCandidates() {
-            if (authenticated && isMounted) {
-                const data = await getAllCandidates();
-                if (data) {
-                    const [names, votes] = data;
-                    setCandidates(names);
-                    setVoteCounts(votes);
-                }
-            }
-        }
-
-        fetchCandidates();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [authenticated, getAllCandidates]);
-
     const handleVote = async (e: React.FormEvent) => {
         e.preventDefault();
         await vote(parseInt(candidateIndex));
@@ -94,12 +73,26 @@ export default function Component() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {candidates.map((candidate, index) => (
-                            <TableRow key={index}>
-                                <TableCell className="font-medium">{index}</TableCell>
-                                <TableCell>{candidate}</TableCell>
+                            <TableRow>
+                                <TableCell className="font-medium">0</TableCell>
+                                <TableCell>Candidate A</TableCell>
                             </TableRow>
-                        ))}
+                            <TableRow>
+                                <TableCell className="font-medium">1</TableCell>
+                                <TableCell>Candidate B</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium">2</TableCell>
+                                <TableCell>Candidate C</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium">3</TableCell>
+                                <TableCell>Candidate D</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium">4</TableCell>
+                                <TableCell>Candidate E</TableCell>
+                            </TableRow>
                     </TableBody>
                 </Table>
                 <Card className="w-full max-w-md">
